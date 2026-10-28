@@ -50,6 +50,21 @@ A server acknowledgement means the server received the event; it does not prove 
 6. Integrate actual device telemetry after controller/module models and message protocol are confirmed.
 7. Run failure-mode tests: no GNSS fix, stale location, offline device, duplicate SOS, server timeout, app notification denied, and invalid credentials.
 
+## Added in the current branch update — camera, voice, and health-status UI
+
+The caregiver page now includes:
+- A phone-camera panel using the browser `getUserMedia` API, with explicit open/close controls and a local snapshot preview. The page does not upload images. Camera access requires browser permission and a secure context (normally HTTPS); browser/device support varies.
+- Voice readout using the browser speech-synthesis API and optional speech recognition when supported. Voice commands are best-effort and have button alternatives.
+- A health-status panel for battery/voltage, sensors/controller, and connectivity. These values deliberately remain unknown because no real device telemetry protocol or hardware has been connected. The read-aloud status also states this limitation.
+- Arabic, French, and English labels for the new UI.
+
+## Important limits and next steps
+- The phone-camera control opens the phone's camera, not a camera module mounted on the stick. Stick-camera streaming requires confirming the exact camera/controller models and implementing a separate authenticated transport.
+- The new health panel is a UI placeholder, not real hardware monitoring. Next, confirm both controller models, camera module, sensor inventory, battery measurement circuit, and communication protocol before defining telemetry fields or wiring.
+- Speech recognition is not consistently available across mobile browsers and may depend on browser-managed services/network access. Do not treat it as an emergency channel; SOS must remain a deliberate manual action with explicit delivery acknowledgements.
+- Static hosting (for example, GitHub Pages) can serve the prototype at no hosting cost, but it cannot by itself provide authenticated device ingestion, reliable background push, or secure server-side secrets. Keep the camera local and do not add image uploads by default.
+- Camera, microphone, language, accessibility, and real-device integration still require browser and Android-device testing. No such runtime or hardware tests are claimed by this change.
+
 ## Acceptance gates
 - Demo actions never claim a real SOS was sent.
 - Unknown device and location values remain visibly unknown.
