@@ -188,7 +188,13 @@ Never report “passed” based solely on source-code review or a successful fil
 - UNHCR 2024 guidance on assistive technology and white canes: https://www.unhcr.org/sites/default/files/2024-08/facilitating-access-to-assistive-technology-and-rehabilitation-2024.pdf
 - Related research and reviews are catalogued in RESEARCH_AND_ARCHITECTURE.md; reported results must not be treated as expected performance for this prototype.
 
-## 8. Decisions to make next
+## 8. Budget constraint and purchase strategy
+
+The user set a ceiling of 10,000 DZD for parts not already owned. Public listings checked on 2026-10-28 show a SIM7600-based LTE+GNSS board listed at 14,500 DZD locally, with another imported SIM7600G-H listing at 14,048 DZD before shipping/customs. Both exceed the entire parts budget before sensor, power hardware, wiring and enclosure. Treat prices as listing snapshots, not confirmed quotes. Do not purchase without rechecking exact SKU, stock, coverage, current operator bands, delivery and total cost.
+
+A lower-cost SIM800L is a 2G GSM/GPRS device and does not meet the LTE requirement by itself; it is only a viable cellular-data fallback if 2G/GPRS data is confirmed usable with the intended operator and in the target area. It also needs a separate GNSS receiver if stick-based GPS is retained. Do not silently downgrade to SMS-only. If no compatible data modem fits the cap, defer the modem purchase and develop local alerts plus an explicitly modular SOS interface until a verified solution is found. Monthly SIM data and any hosting are recurring costs outside the parts cap and must be disclosed separately.
+
+## 9. Decisions to make next
 
 1. Identify both controller boards from clear photos/markings.
 2. Identify camera and its sensor.
@@ -199,7 +205,7 @@ Never report “passed” based solely on source-code review or a successful fil
 7. Decide the app/backend approach only after the data flow, security and recurring-cost review.
 8. Choose the build environment after board identification: Arduino IDE/PlatformIO may be simpler for a small prototype; ESP-IDF offers official lower-level tooling. Keep the choice consistent and record versions.
 
-## 9. Change control
+## 10. Change control
 
 - Work on research/smart-blind-stick-architecture.
 - Keep changes small and reviewable.
