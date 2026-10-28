@@ -59,11 +59,18 @@ The caregiver page now includes:
 - Arabic, French, and English labels for the new UI.
 
 ## Important limits and next steps
-- The phone-camera control opens the phone's camera, not a camera module mounted on the stick. Stick-camera streaming requires confirming the exact camera/controller models and implementing a separate authenticated transport.
+- The SOS camera panel is only a UI placeholder; it does not stream video yet. Real stick-camera streaming requires confirming the exact camera/controller models, implementing an authenticated transport, and adding a backend/session flow that starts the feed after a verified manual SOS.
 - The new health panel is a UI placeholder, not real hardware monitoring. Next, confirm both controller models, camera module, sensor inventory, battery measurement circuit, and communication protocol before defining telemetry fields or wiring.
 - Speech recognition is not consistently available across mobile browsers and may depend on browser-managed services/network access. Do not treat it as an emergency channel; SOS must remain a deliberate manual action with explicit delivery acknowledgements.
 - Static hosting (for example, GitHub Pages) can serve the prototype at no hosting cost, but it cannot by itself provide authenticated device ingestion, reliable background push, or secure server-side secrets. Keep the camera local and do not add image uploads by default.
 - Camera, microphone, language, accessibility, and real-device integration still require browser and Android-device testing. No such runtime or hardware tests are claimed by this change.
+
+## SOS-triggered stick-camera design
+- Keep manual SOS delivery independent from camera startup and video delivery.
+- Start a camera session only after a verified SOS event reaches the backend; return distinct acknowledgements for SOS receipt and camera-session readiness.
+- The caregiver UI must show `waiting`, `streaming`, `unavailable`, or `failed` only when the corresponding state is evidenced by the backend/device. A demo event must never be described as a real SOS or real camera request.
+- Camera stream must use an authenticated, encrypted channel with expiring session authorization. Do not expose a permanent stream URL or device secret in static frontend code.
+- Define a visible privacy indicator and stop-stream behavior; camera failure must not cancel or delay the SOS alert.
 
 ## Acceptance gates
 - Demo actions never claim a real SOS was sent.
