@@ -2,7 +2,7 @@
 
 Date: 2026-10-28
 Branch: research/smart-blind-stick-architecture
-Status: planning only. No parts purchased. No hardware tests performed. Prices in DZD are intentionally TBD until locally checked.
+Status: planning only. No parts purchased. No hardware tests performed. User budget ceiling: 10,000 DZD for parts not already owned. Prices below are public listing snapshots found on 2026-10-28 and must be reconfirmed with the seller before purchase.
 
 ## 1. Design decisions currently in scope
 
@@ -41,7 +41,30 @@ Status: planning only. No parts purchased. No hardware tests performed. Prices i
 | Secure backend/API | 1 | Architecture choice pending | HTTPS/TLS, device authentication, event IDs/deduplication, explicit acknowledgement, access control and retention policy; disclose recurring cost | TBD |
 | Optional microSD/storage | 0–1 | Optional | Only if local event buffering is required and the selected board supports it; do not add until needed | TBD |
 
-## 3. Shortlist approach for cellular/GNSS
+## 3. Budget reality check (10,000 DZD ceiling)
+
+Public listing snapshots checked on 2026-10-28:
+- SIM7600-based TTGO ESP32 LTE + GNSS board listed at 14,500 DZD by Power Lab: https://powerlab.dz/product/ttgo-esp32-lte-gps-sim7600/
+- SIM7600G-H PCIE listing at 14,048 DZD on Ubuy Algeria, excluding shipping and customs: https://www.ubuy.dz/ar/product/J99L9RFMS-original-sim7600g-h-pcie-simcom-4g-lte-cat-4-module-global-coverage-with-gnss-support-mini-pcie-connector-lte-tdd-lte-fdd-hspa-gsm-gprs-edge
+- A SIM800L module is listed around 1,600 DZD by Digibox DZ: https://digibox-dz.com/en/products/DG0032/
+- A separate NEO-6M GPS module is listed around 1,800 DZD by DZ Automation: https://dzautomation.net/categorie-produit/reseau/module-gsm-gprs-gps/
+- A VL53L0X module is listed at 850 DZD and an HC-SR04 at 650 DZD by BinaryTech DZ: https://binarytech-dz.com/category/capteurs-ultrason-mouvements-et-gestes
+- A VL53L1X ToF module is listed at 2,400 DZD by Power Lab: https://powerlab.dz/product/tof400c-vl53l1x-4m-precision-distance-measurements/
+
+These are seller listings, not quotes or proof of stock, compatibility, quality or delivery cost. Prices may change. The LTE + GNSS candidate listings alone exceed the 10,000 DZD ceiling before adding a distance sensor, power hardware, antenna, wiring or enclosure. Therefore do not purchase the LTE candidate under the current budget without finding a verified lower-cost compatible option or increasing the budget.
+
+SIM800L is a lower-cost 2G GSM/GPRS option, not LTE. It does not include GNSS, so pairing it with a separate GPS module increases parts and power complexity; more importantly, it only meets the chosen cellular-data requirement if the intended operator still provides usable 2G/GPRS service in the target areas and the data link can reach the secure service. Verify this first. Do not quietly switch the product requirement from cellular data to SMS-only. If no verified cellular-data solution fits the budget, defer cellular hardware and prototype local obstacle alerts plus GNSS separately, while keeping SOS/network integration modular.
+
+### Budget rule
+
+- Hard cap: 10,000 DZD for parts not already owned.
+- No purchases are authorized by this document.
+- Prioritize parts required for safe local obstacle alerts and reliable power.
+- Treat SIM/data plan, backend hosting, delivery and import fees as separate costs and disclose them before commitment.
+- Record supplier, date checked, exact SKU, stock status, delivery cost and return policy before choosing.
+- Do not count a phone app as a substitute for an onboard cellular modem unless the intended SOS workflow explicitly relies on the phone being nearby and online.
+
+## 4. Shortlist approach for cellular/GNSS
 
 ### Candidate family: SIMCom SIM7600
 
@@ -65,7 +88,7 @@ Purchase gate:
 
 Do not buy a module based only on an online listing saying “4G global”. Do not assume SIM7600G-H, SIM7600E-H or any other suffix has identical bands or GNSS features.
 
-## 4. Algeria network verification checklist
+## 5. Algeria network verification checklist
 
 For each candidate operator (Mobilis, Djezzy, Ooredoo):
 - [ ] Identify intended operator and exact plan.
@@ -83,7 +106,7 @@ Initial frequency reference:
 - ARPCE publishes mobile 4G and frequency-management information: https://www.arpce.dz/ar/service/4g and https://www.arpce.dz/fr/file/w5i7z4
 - Band 3 (1800 MHz) is a useful band to investigate first, but do not treat one band as proof of compatibility; verify exact current assignments, operator, geography and exact modem variant.
 
-## 5. Power budget and safety verification
+## 6. Power budget and safety verification
 
 Do not finalize battery or regulator from the modem's nominal/idle current alone.
 
@@ -111,7 +134,7 @@ Safety notes:
 - Do not connect a 5 V UART/GPIO output directly to a 3.3 V-only ESP32 input.
 - Final pin map and wiring require exact board revisions and datasheets.
 
-## 6. SOS message and app minimum
+## 7. SOS message and app minimum
 
 Proposed event fields:
 - event_id (unique; duplicate-safe)
@@ -139,7 +162,7 @@ Security:
 - Server validates payloads, rate limits requests, deduplicates event_id and returns explicit acknowledgement.
 - Define credential revocation and data deletion before user trials.
 
-## 7. Verification sequence and gates
+## 8. Verification sequence and gates
 
 | Gate | Test | Evidence required | Stop condition |
 |---|---|---|---|
@@ -154,7 +177,7 @@ Security:
 
 A document update is not proof that any gate passed. No hardware, network, app or safety tests have been run as part of this planning update.
 
-## 8. Budget template
+## 9. Budget template
 
 Fill prices only after checking local suppliers; avoid fabricated estimates.
 
@@ -175,18 +198,18 @@ Fill prices only after checking local suppliers; avoid fabricated estimates.
 
 No purchases are authorized by this document. First produce a local quote comparison and a total-cost estimate, including recurring data/hosting charges.
 
-## 9. Open decisions
+## 10. Open decisions
 
 1. Exact controller and camera board models.
 2. Exact battery/regulator and available output drivers.
 3. Local distance sensor choices and prices.
 4. Exact cellular carrier-board SKU/revision and antenna connectors.
 5. Intended operator and usage locations for coverage verification.
-6. Total budget ceiling in DZD and acceptable monthly data/hosting cost.
+6. User-confirmed parts budget ceiling: 10,000 DZD; acceptable monthly data/hosting cost remains unknown.
 7. Whether a minimal backend can be hosted without recurring cost; verify instead of assuming “free forever”.
 8. Whether phone-location fallback should be a separate SOS action in the app for v1.
 
-## 10. Change control
+## 11. Change control
 
 - Keep work on research/smart-blind-stick-architecture.
 - Do not purchase parts, merge, publish or claim test success without evidence and explicit approval.
